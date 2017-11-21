@@ -20,9 +20,17 @@ using Umbraco.ModelsBuilder.Umbraco;
 
 namespace Umbraco.Web.PublishedContentModels
 {
+	// Mixin content Type 1065 with alias "sEO"
+	/// <summary>SEO</summary>
+	public partial interface ISEO : IPublishedContent
+	{
+		/// <summary>meta title</summary>
+		string MetaTitle { get; }
+	}
+
 	/// <summary>SEO</summary>
 	[PublishedContentModel("sEO")]
-	public partial class SEO : PublishedContentModel
+	public partial class SEO : PublishedContentModel, ISEO
 	{
 #pragma warning disable 0109 // new is redundant
 		public new const string ModelTypeAlias = "sEO";
@@ -51,7 +59,10 @@ namespace Umbraco.Web.PublishedContentModels
 		[ImplementPropertyType("metaTitle")]
 		public string MetaTitle
 		{
-			get { return this.GetPropertyValue<string>("metaTitle"); }
+			get { return GetMetaTitle(this); }
 		}
+
+		/// <summary>Static getter for meta title</summary>
+		public static string GetMetaTitle(ISEO that) { return that.GetPropertyValue<string>("metaTitle"); }
 	}
 }
